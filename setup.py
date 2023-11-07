@@ -14,7 +14,7 @@ with open(os.path.join("dynamicsizerecarray", "version.py")) as f:
 setuptools.setup(
     name="dynamicsizerecarray",
     version=version,
-    description=("Numpy recarray but with dynamic push_back/append."),
+    description=("Like a numpy-recarray but dynamically appendable."),
     long_description=long_description,
     long_description_content_type="text/x-rst",
     url="https://github.com/cherenkov-plenoscope/dynamicsizerecarray",
