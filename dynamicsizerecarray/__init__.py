@@ -4,9 +4,11 @@ import copy
 
 
 class DynamicSizeRecarray:
+    """
+    A dynamic, appendable implementation of numpy.core.records.recarray.
+    """
     def __init__(self, recarray=None, dtype=None):
         """
-        A dynamic version of numpy.core.records.recarray.
         Either provide an existing recarray 'recarray' or
         provide the 'dtype' to start with an empty recarray.
 
