@@ -34,7 +34,7 @@ def test_init_from_recarray():
 
         dra = dynamicsizerecarray.DynamicSizeRecarray(recarray=recarray)
 
-        assert dra.size == size
+        assert dra.shape[0] == size
 
 
 def test_append_record():
@@ -47,7 +47,7 @@ def test_append_record():
         record = {"a": 2 * i, "b": i}
         dra.append_record(record=record)
         assert len(dra) == i + 1
-        assert dra.size == len(dra)
+        assert dra.shape[0] == len(dra)
 
     out = dra.to_recarray()
     assert len(out) == SIZE
@@ -77,7 +77,7 @@ def test_append_recarray():
         dra.append_recarray(recarray=recarray)
 
         assert len(dra) == (1 + i) * BLOCK_SIZE
-        assert dra.size == len(dra)
+        assert dra.shape[0] == len(dra)
 
     out = dra.to_recarray()
     assert len(out) == NUM_BLOCKS * BLOCK_SIZE
