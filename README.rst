@@ -46,7 +46,7 @@ Or initialize the ``DynamicSizeRecarray`` with an already existing ``recarray``.
     )
     rec["hour"][0] = 2
     rec["minute"][0] = 13
-    rec"temperature"][0] = 20.123
+    rec["temperature"][0] = 20.123
 
     dra = dynamicsizerecarray.DynamicSizeRecarray(recarray=rec)
 
@@ -75,7 +75,7 @@ Or you can append another ``recarray``.
     )
     rec["hour"][0] = 13
     rec["minute"][0] = 41
-    rec"temperature"][0] = 18.623
+    rec["temperature"][0] = 18.623
 
     dra.append_recarray(rec)
 
@@ -114,8 +114,7 @@ Further the ``DynamicSizeRecarray`` provides the properties ``shape`` and
 wording
 *******
 
-- ``record`` is a ``dict`` with keys (and values) matching the ``dtype`` of
-    the ``DynamicSizeRecarray``. (Wording is adopted from ``pandas``).
+- ``record`` is a ``dict`` with keys (and values) matching the ``dtype`` of the ``DynamicSizeRecarray``. (Wording is adopted from ``pandas``).
 
 - ``records`` is just a ``list`` of ``record`` s (Also adopted from ``pandas``).
 
