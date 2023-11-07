@@ -7,6 +7,7 @@ class DynamicSizeRecarray:
     """
     A dynamic, appendable implementation of numpy.core.records.recarray.
     """
+
     def __init__(self, recarray=None, dtype=None):
         """
         Either provide an existing recarray 'recarray' or

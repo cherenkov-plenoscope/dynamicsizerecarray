@@ -1,7 +1,7 @@
 ###################
 DynamicSizeRecarray
 ###################
-|TestStatus| |PyPiStatus| |BlackStyle|
+|TestStatus| |PyPiStatus| |BlackStyle| |BlackPackStyle| |MITLicenseBadge|
 
 A dynamic, appandable version of Numpy's ``recarray``. The goal is to have a
 ``recarray``-like-object which can be appended to in a transparent and
@@ -114,12 +114,12 @@ Further the ``DynamicSizeRecarray`` provides the properties ``shape`` and
 wording
 *******
 
-- ``record``: A ``dict`` with keys (and values) matching the ``dtype`` of
+- ``record`` is a ``dict`` with keys (and values) matching the ``dtype`` of
     the ``DynamicSizeRecarray``. (Wording is adopted from ``pandas``).
 
-- ``records`` is just a ``list`` of ``record``s (Also adopted from ``pandas``).
+- ``records`` is just a ``list`` of ``record`` s (Also adopted from ``pandas``).
 
-- ``recarray``: Is short for ``np.core.records.recarray``.
+- ``recarray`` is short for ``np.core.records.recarray``.
 
 
 .. |TestStatus| image:: https://github.com/cherenkov-plenoscope/dynamicsizerecarray/actions/workflows/test.yml/badge.svg?branch=main
@@ -131,3 +131,8 @@ wording
 .. |BlackStyle| image:: https://img.shields.io/badge/code%20style-black-000000.svg
     :target: https://github.com/psf/black
 
+.. |BlackPackStyle| image:: https://img.shields.io/badge/pack%20style-black-000000.svg
+    :target: https://github.com/cherenkov-plenoscope/black_pack
+
+.. |MITLicenseBadge| image:: https://img.shields.io/badge/License-MIT-yellow.svg
+    :target: https://opensource.org/licenses/MIT
