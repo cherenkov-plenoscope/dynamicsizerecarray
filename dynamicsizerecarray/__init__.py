@@ -147,13 +147,25 @@ class DynamicSizeRecarray:
                 )
             )
 
+    def tobytes(self):
+        return self.to_recarray().tobytes()
+
     def __getitem__(self, idx):
-        self._raise_IndexError_if_out_of_bounds(idx=idx)
-        return self._recarray[idx]
+        if isinstance(idx, str):
+            return self._getitem_by_column_key_str(key=idx)
+        else:
+            return self._getitem_by_row_idx_int(idx=idx)
 
     def __setitem__(self, idx, value):
         self._raise_IndexError_if_out_of_bounds(idx=idx)
         self._recarray[idx] = value
+
+    def _getitem_by_column_key_str(self, key):
+        return self._recarray[key][0 : self.__len__()]
+
+    def _getitem_by_row_idx_int(self, idx):
+        self._raise_IndexError_if_out_of_bounds(idx=idx)
+        return self._recarray[idx]
 
     def __len__(self):
         return self._size
