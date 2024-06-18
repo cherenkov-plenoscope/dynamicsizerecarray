@@ -140,6 +140,15 @@ class DynamicSizeRecarray:
             del swp
 
     def _raise_IndexError_if_out_of_bounds(self, idx):
+        if isinstance(idx, slice):
+            if idx.start:
+                self.__raise_IndexError_if_out_of_bounds(idx=idx.start)
+            if idx.stop:
+                self.__raise_IndexError_if_out_of_bounds(idx=idx.stop)
+        else:
+            self.__raise_IndexError_if_out_of_bounds(idx=idx)
+
+    def __raise_IndexError_if_out_of_bounds(self, idx):
         if idx >= self._size:
             raise IndexError(
                 "index {:d} is out of bounds for size {:d}".format(
