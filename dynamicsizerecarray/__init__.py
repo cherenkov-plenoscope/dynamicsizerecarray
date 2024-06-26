@@ -139,14 +139,35 @@ class DynamicSizeRecarray:
             self._recarray[start:stop] = swp[0 : self._size]
             del swp
 
-    def _raise_IndexError_if_out_of_bounds(self, idx):
+    def __limit_idx_to_valid_bounds(self, i):
+        if i < 0:
+            return 0
+        elif i >= self._size:
+            return self._size - 1
+        else:
+            return i
+
+    def _limit_idx_to_valid_bounds(self, idx):
         if isinstance(idx, slice):
+            sl = {}
             if idx.start:
-                self.__raise_IndexError_if_out_of_bounds(idx=idx.start)
+                sl["start"] = self.__limit_idx_to_valid_bounds(i=idx.start)
             if idx.stop:
-                self.__raise_IndexError_if_out_of_bounds(idx=idx.stop)
+                sl["stop"] = self.__limit_idx_to_valid_bounds(i=idx.stop)
+            if idx.step:
+                sl["step"] = idx.step
+
+            if "start" in sl and "stop" in sl and "step" in sl:
+                return slice(sl["start"], sl["stop"], sl["step"])
+            elif "start" in sl and "stop" in sl:
+                return slice(sl["start"], sl["stop"])
+            elif "stop" in sl:
+                return slice(sl["stop"])
+            else:
+                raise AssertionError("Expected slice to have a 'stop'")
         else:
             self.__raise_IndexError_if_out_of_bounds(idx=idx)
+            return idx
 
     def __raise_IndexError_if_out_of_bounds(self, idx):
         if idx >= self._size:
@@ -166,15 +187,15 @@ class DynamicSizeRecarray:
             return self._getitem_by_row_idx_int(idx=idx)
 
     def __setitem__(self, idx, value):
-        self._raise_IndexError_if_out_of_bounds(idx=idx)
-        self._recarray[idx] = value
+        midx = self._limit_idx_to_valid_bounds(idx=idx)
+        self._recarray[midx] = value
 
     def _getitem_by_column_key_str(self, key):
         return self._recarray[key][0 : self.__len__()]
 
     def _getitem_by_row_idx_int(self, idx):
-        self._raise_IndexError_if_out_of_bounds(idx=idx)
-        return self._recarray[idx]
+        midx = self._limit_idx_to_valid_bounds(idx=idx)
+        return self._recarray[midx]
 
     def __len__(self):
         return self._size

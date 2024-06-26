@@ -13,6 +13,9 @@ def test_slice():
     with pytest.raises(IndexError):
         _ = dra[200]
 
+    ret = dra[200:300]
+    assert ret.shape[0] == 0
+
     s = dra[10:20]
     for idx, val in enumerate(range(10, 20)):
         assert s["b"][idx] == val
