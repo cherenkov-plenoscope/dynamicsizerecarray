@@ -149,22 +149,14 @@ class DynamicSizeRecarray:
 
     def _limit_idx_to_valid_bounds(self, idx):
         if isinstance(idx, slice):
-            sl = {}
+            sl = {"start": None, "stop": self._size, "step": None}
             if idx.start:
                 sl["start"] = self.__limit_idx_to_valid_bounds(i=idx.start)
             if idx.stop:
                 sl["stop"] = self.__limit_idx_to_valid_bounds(i=idx.stop)
             if idx.step:
                 sl["step"] = idx.step
-
-            if "start" in sl and "stop" in sl and "step" in sl:
-                return slice(sl["start"], sl["stop"], sl["step"])
-            elif "start" in sl and "stop" in sl:
-                return slice(sl["start"], sl["stop"])
-            elif "stop" in sl:
-                return slice(sl["stop"])
-            else:
-                raise AssertionError("Expected slice to have a 'stop'")
+            return slice(sl["start"], sl["stop"], sl["step"])
         else:
             self.__raise_IndexError_if_out_of_bounds(idx=idx)
             return idx
