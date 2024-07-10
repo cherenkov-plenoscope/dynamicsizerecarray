@@ -34,7 +34,8 @@ class DynamicSizeRecarray:
                 dtype=dtype,
             )
 
-        initial_capacity = np.max([2, len(recarray)])
+        _minimal_capacity = 2
+        initial_capacity = np.max([_minimal_capacity, len(recarray)])
         self._recarray = np.core.records.recarray(
             shape=initial_capacity,
             dtype=recarray.dtype,
@@ -191,6 +192,17 @@ class DynamicSizeRecarray:
 
     def __len__(self):
         return self._size
+
+    def shrink_to_fit(self):
+        """
+        Reduces the allocated memory to a minimum.
+        """
+        _minimal_capacity = 2
+        if (
+            self._size < self._recarray.shape[0]
+            and self._size >= _minimal_capacity
+        ):
+            self._recarray = copy.deepcopy(self._recarray[0 : self._size])
 
     def __repr__(self):
         out = "{:s}(dtype={:s})".format(
