@@ -144,7 +144,7 @@ class DynamicSizeRecarray:
         if i < 0:
             return 0
         elif i >= self._size:
-            return self._size - 1
+            return self._size
         else:
             return i
 

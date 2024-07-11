@@ -62,3 +62,17 @@ def test_slice_out_of_range():
     s = dra[10:2:20]
     for idx, val in enumerate(range(10, 2, 20)):
         assert s["b"][idx] == val
+
+
+def test_full_range():
+    dra = make_example_dynamicsizerecarray()
+    nra = dra.to_recarray()
+
+    assert dra.shape[0] == nra.shape[0]
+    start = 0
+    stop = nra.shape[0]
+
+    dres = dra[start:stop]
+    nres = nra[start:stop]
+
+    assert len(dres) == len(nres)
