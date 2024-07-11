@@ -180,8 +180,10 @@ class DynamicSizeRecarray:
             return self._getitem_by_row_idx_int(idx=idx)
 
     def __setitem__(self, idx, value):
-        midx = self._limit_idx_to_valid_bounds(idx=idx)
-        self._recarray[midx] = value
+        if isinstance(idx, str):
+            self._setitem_by_column_key_str(key=idx, value=value)
+        else:
+            self._setitem_by_row_idx_int(idx=idx, value=value)
 
     def _getitem_by_column_key_str(self, key):
         return self._recarray[key][0 : self.__len__()]
@@ -189,6 +191,13 @@ class DynamicSizeRecarray:
     def _getitem_by_row_idx_int(self, idx):
         midx = self._limit_idx_to_valid_bounds(idx=idx)
         return self._recarray[midx]
+
+    def _setitem_by_row_idx_int(self, idx, value):
+        midx = self._limit_idx_to_valid_bounds(idx=idx)
+        self._recarray[midx] = value
+
+    def _setitem_by_column_key_str(self, key, value):
+        self._recarray[key][0 : self.__len__()] = value
 
     def __len__(self):
         return self._size
