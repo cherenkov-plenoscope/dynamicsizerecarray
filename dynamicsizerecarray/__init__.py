@@ -8,7 +8,7 @@ class DynamicSizeRecarray:
     A dynamic, appendable implementation of numpy.core.records.recarray.
     """
 
-    def __init__(self, recarray=None, dtype=None):
+    def __init__(self, recarray=None, dtype=None, shape=0):
         """
         Either provide an existing recarray 'recarray' or
         provide the 'dtype' to start with an empty recarray.
@@ -19,6 +19,8 @@ class DynamicSizeRecarray:
             The start of the dynamic recarray.
         dtype : list(tuple("key", "dtype_str")), default=None
             The dtype of the dynamic recarray.
+        shape : int
+            The initial size. (Same as in np.core.records.recarray)
         """
         self._size = 0
         if recarray is None and dtype == None:
@@ -28,19 +30,24 @@ class DynamicSizeRecarray:
                 "Expected either one of 'recarray' or' dtype' to be 'None'"
             )
 
+        _minimal_capacity = 2
+
         if dtype:
-            recarray = np.core.records.recarray(
-                shape=0,
+            if shape < 0:
+                raise AttributeError("Expected shape >= 0.")
+            initial_capacity = np.max([_minimal_capacity, shape])
+            self._recarray = np.core.records.recarray(
+                shape=initial_capacity,
                 dtype=dtype,
             )
-
-        _minimal_capacity = 2
-        initial_capacity = np.max([_minimal_capacity, len(recarray)])
-        self._recarray = np.core.records.recarray(
-            shape=initial_capacity,
-            dtype=recarray.dtype,
-        )
-        self.append_recarray(recarray=recarray)
+            self._size = shape
+        else:
+            initial_capacity = np.max([_minimal_capacity, len(recarray)])
+            self._recarray = np.core.records.recarray(
+                shape=initial_capacity,
+                dtype=recarray.dtype,
+            )
+            self.append_recarray(recarray=recarray)
 
     @property
     def shape(self):
