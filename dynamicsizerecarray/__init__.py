@@ -170,11 +170,12 @@ class DynamicSizeRecarray:
             return idx
 
     def __raise_IndexError_if_out_of_bounds(self, idx):
-        if idx >= self._size:
+        iii = np.asarray(idx)
+        mask = iii >= self._size
+        if np.any(mask):
+            bad_iii = iii[mask]
             raise IndexError(
-                "index {:d} is out of bounds for size {:d}".format(
-                    idx, self._size
-                )
+                f"index {str(bad_iii):s} is out of bounds for size {self._size:d}."
             )
 
     def tobytes(self):

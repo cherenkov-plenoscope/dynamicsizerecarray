@@ -2,6 +2,7 @@ import dynamicsizerecarray
 import pytest
 import numpy as np
 
+
 def test_init_with_shape():
     dra = dynamicsizerecarray.DynamicSizeRecarray(
         dtype=[("a", "i8"), ("b", "u2")],
@@ -18,4 +19,3 @@ def test_init_negative_shape():
             dtype=[("a", "i8")],
             shape=-1,
         )
-
