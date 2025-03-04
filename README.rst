@@ -40,7 +40,7 @@ Or initialize the ``DynamicSizeRecarray`` with an already existing ``recarray``.
 
     import numpy
 
-    rec = numpy.core.records.recarray(
+    rec = numpy.recarray(
         shape=1,
         dtype=[("hour", "u1"), ("minute", "u1"), ("temperature", "f8")],
     )
@@ -69,7 +69,7 @@ Or you can append another ``recarray``.
 
 .. code:: python
 
-    rec = numpy.core.records.recarray(
+    rec = numpy.recarray(
         shape=1,
         dtype=[("hour", "u1"), ("minute", "u1"), ("temperature", "f8")],
     )
@@ -118,7 +118,7 @@ wording
 
 - ``records`` is just a ``list`` of ``record`` s (Also adopted from ``pandas``).
 
-- ``recarray`` is short for ``np.core.records.recarray``.
+- ``recarray`` is short for ``np.recarray``.
 
 
 .. |TestStatus| image:: https://github.com/cherenkov-plenoscope/dynamicsizerecarray/actions/workflows/test.yml/badge.svg?branch=main
