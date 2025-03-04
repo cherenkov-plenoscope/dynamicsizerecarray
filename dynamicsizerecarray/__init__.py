@@ -5,7 +5,7 @@ import copy
 
 class DynamicSizeRecarray:
     """
-    A dynamic, appendable implementation of numpy.core.records.recarray.
+    A dynamic, appendable implementation of numpy.recarray.
     """
 
     def __init__(self, recarray=None, dtype=None, shape=0):
@@ -15,12 +15,12 @@ class DynamicSizeRecarray:
 
         Parameters
         ----------
-        recarray : numpy.core.records.recarray, default=None
+        recarray : numpy.recarray, default=None
             The start of the dynamic recarray.
         dtype : list(tuple("key", "dtype_str")), default=None
             The dtype of the dynamic recarray.
         shape : int
-            The initial size. (Same as in np.core.records.recarray)
+            The initial size. (Same as in np.recarray)
         """
         self._size = 0
         if recarray is None and dtype == None:
@@ -36,14 +36,14 @@ class DynamicSizeRecarray:
             if shape < 0:
                 raise AttributeError("Expected shape >= 0.")
             initial_capacity = np.max([_minimal_capacity, shape])
-            self._recarray = np.core.records.recarray(
+            self._recarray = np.recarray(
                 shape=initial_capacity,
                 dtype=dtype,
             )
             self._size = shape
         else:
             initial_capacity = np.max([_minimal_capacity, len(recarray)])
-            self._recarray = np.core.records.recarray(
+            self._recarray = np.recarray(
                 shape=initial_capacity,
                 dtype=recarray.dtype,
             )
@@ -75,9 +75,9 @@ class DynamicSizeRecarray:
 
     def to_recarray(self):
         """
-        Exports to a numpy.core.records.recarray.
+        Exports to a numpy.recarray.
         """
-        out = np.core.records.recarray(
+        out = np.recarray(
             shape=self._size,
             dtype=self._recarray.dtype,
         )
@@ -121,7 +121,7 @@ class DynamicSizeRecarray:
 
         Parameters
         ----------
-        recarray : numpy.core.records.recarray
+        recarray : numpy.recarray
             This will be appended to the internal, dynamic recarray.
         """
         self._grow_if_needed(additional_size=len(recarray))
@@ -138,7 +138,7 @@ class DynamicSizeRecarray:
         if required_size > current_capacity:
             swp = copy.deepcopy(self._recarray)
             next_capacity = np.max([current_capacity * 2, required_size])
-            self._recarray = np.core.records.recarray(
+            self._recarray = np.recarray(
                 shape=next_capacity,
                 dtype=swp.dtype,
             )

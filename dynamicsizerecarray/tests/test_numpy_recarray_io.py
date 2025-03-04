@@ -7,7 +7,7 @@ def test_io():
     DTYPE = [("a", "i8"), ("b", "u2")]
 
     with tempfile.TemporaryDirectory(prefix="dynamicsizerecarray_") as tmp_dir:
-        a = np.core.records.recarray(
+        a = np.recarray(
             shape=18,
             dtype=DTYPE,
         )

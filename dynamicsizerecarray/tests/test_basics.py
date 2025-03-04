@@ -12,7 +12,7 @@ def test_init_conflicting_parameters():
     with pytest.raises(AttributeError):
         dra = dynamicsizerecarray.DynamicSizeRecarray(
             dtype=[("key", "i8")],
-            recarray=np.core.records.recarray(
+            recarray=np.recarray(
                 shape=0,
                 dtype=[("key", "i8")],
             ),
@@ -27,7 +27,7 @@ def test_init_from_dtype():
 
 def test_init_from_recarray():
     for size in [0, 2, 100]:
-        recarray = np.core.records.recarray(
+        recarray = np.recarray(
             shape=size,
             dtype=[("a", "i8"), ("b", "u2")],
         )
@@ -67,7 +67,7 @@ def test_append_recarray():
     NUM_BLOCKS = 12
     BLOCK_SIZE = 8
     for i in range(NUM_BLOCKS):
-        recarray = np.core.records.recarray(
+        recarray = np.recarray(
             shape=BLOCK_SIZE,
             dtype=[("a", "i8"), ("b", "u2")],
         )
