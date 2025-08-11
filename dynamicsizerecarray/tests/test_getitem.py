@@ -6,8 +6,8 @@ def make_test_dynrec():
     r = dynamicsizerecarray.DynamicSizeRecarray(
         dtype=[("a", "i8"), ("b", "u2")]
     )
-    r.append_record({"a": 123, "b": 12})
-    r.append_record({"a": -23, "b": 1})
+    r.append({"a": 123, "b": 12})
+    r.append({"a": -23, "b": 1})
     return r
 
 

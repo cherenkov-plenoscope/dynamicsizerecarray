@@ -6,9 +6,9 @@ def make_test_dynrec():
     r = dynamicsizerecarray.DynamicSizeRecarray(
         dtype=[("a", "i8"), ("b", "u2")]
     )
-    r.append_record({"a": 3, "b": 10})
-    r.append_record({"a": 2, "b": 20})
-    r.append_record({"a": 1, "b": 30})
+    r.append({"a": 3, "b": 10})
+    r.append({"a": 2, "b": 20})
+    r.append({"a": 1, "b": 30})
 
     assert r._recarray.shape[0] > len(
         r

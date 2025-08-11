@@ -45,7 +45,7 @@ def test_append_record():
     SIZE = 1024
     for i in range(SIZE):
         record = {"a": 2 * i, "b": i}
-        dra.append_record(record=record)
+        dra.append(record)
         assert len(dra) == i + 1
         assert dra.shape[0] == len(dra)
 
@@ -74,7 +74,7 @@ def test_append_recarray():
         recarray["a"] = 2 * i * np.ones(BLOCK_SIZE)
         recarray["b"] = i * np.ones(BLOCK_SIZE)
 
-        dra.append_recarray(recarray=recarray)
+        dra.append(recarray)
 
         assert len(dra) == (1 + i) * BLOCK_SIZE
         assert dra.shape[0] == len(dra)
@@ -89,6 +89,22 @@ def test_append_recarray():
             k = i * BLOCK_SIZE + j
             assert out["a"][k] == 2 * i
             assert out["b"][k] == i
+
+
+def test_append_numpy_record_recarray():
+    SHAPE = 23
+    dtype = [("a", "i8"), ("b", "u2")]
+    ra = np.recarray(dtype=dtype, shape=SHAPE)
+    ra["a"] = np.arange(0, SHAPE)
+    ra["b"] = 5 + np.arange(0, SHAPE)
+
+    dra = dynamicsizerecarray.DynamicSizeRecarray(dtype=dtype)
+    for numpy_record in ra:
+        dra.append(numpy_record)
+
+    assert dra.shape == ra.shape
+    for key in ra.dtype.names:
+        np.testing.assert_array_equal(ra[key], dra[key])
 
 
 def test_to_recarray_when_empty():

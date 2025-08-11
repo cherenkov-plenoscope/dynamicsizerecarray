@@ -8,7 +8,7 @@ def test_shrink_example():
     assert dra._recarray.shape[0] == 2
 
     for i in range(10):
-        dra.append_record({"key": i})
+        dra.append({"key": i})
 
     assert dra.shape[0] == 10
     assert dra._recarray.shape[0] == 16

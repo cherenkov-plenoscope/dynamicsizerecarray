@@ -3,6 +3,13 @@ import numpy as np
 import copy
 
 
+def _isinstance_in(item, types):
+    for type in types:
+        if isinstance(item, type):
+            return True
+    return False
+
+
 class DynamicSizeRecarray:
     """
     A dynamic, appendable implementation of numpy.recarray.
@@ -47,7 +54,7 @@ class DynamicSizeRecarray:
                 shape=initial_capacity,
                 dtype=recarray.dtype,
             )
-            self.append_recarray(recarray=recarray)
+            self._append_numpy_recarray_or_numpy_ndarray(recarray)
 
     @property
     def shape(self):
@@ -84,51 +91,100 @@ class DynamicSizeRecarray:
         out = self._recarray[0 : self._size]
         return out
 
-    def append_record(self, record):
+    def append(self, a):
         """
-        Append one record to the dynamic racarray.
-        The size of the dynamic recarray will increase by one.
+        Append 'a' to the dynamic recarray. 'a" can be array like
+        (increases size by len(a)) or or scalar like (increases size by 1).
 
         Parameters
         ----------
-        record : dict
-            The record to be appended must have all the keys of the dynamic
-            recarray. Additional keys in the reocrd will be ignored.
+        a : array like or scalar like,
+
+        array like is: np.recarray, np.ndarray, and list of 'scalars'.
+        scalar like is: tuple, dict, np.record, and np.void.
         """
+        if _isinstance_in(a, (np.recarray, np.ndarray)):
+            self._append_numpy_recarray_or_numpy_ndarray(a)
+        elif isinstance(a, list):
+            self._append_list_of_scalars(a)
+        else:
+            self._append_scalar(a, is_not_array_like=True)
+
+    def _append_scalar(self, a, is_not_array_like=False):
+        if isinstance(a, tuple):
+            self._append_tuple(a)
+        elif isinstance(a, dict):
+            self._append_dict(a)
+        elif _isinstance_in(a, (np.void, np.record)):
+            self._append_numpy_record_or_numpy_void(a)
+        else:
+            msg = "tuple, dict, numpy.void, numpy.record"
+            if is_not_array_like:
+                msg += ", np.recarray, np.ndarray, list of scalars"
+            raise TypeError(f"expected type in: [{msg:s}]")
+
+    def _append_tuple(self, a):
+        """
+        Parameters
+        ----------
+        a : tuple
+        """
+        assert isinstance(a, tuple)
+        assert len(a) == len(self._recarray.dtype.names), (
+            "expected len(tuple) == len(self.dtype) == "
+            f"{len(self._recarray.dtype):d} "
+            f"but actually it is {len(a):d}."
+        )
         self._grow_if_needed(additional_size=1)
-        for key in self._recarray.dtype.names:
-            self._recarray[self._size][key] = record[key]
+        for ikey, key in enumerate(self._recarray.dtype.names):
+            self._recarray[self._size][key] = a[ikey]
         self._size += 1
 
-    def append_records(self, records):
+    def _append_dict(self, a):
         """
-        Append the records to the dynamic racarray.
-        The size of the dynamic recarray will increase by len(records).
-
         Parameters
         ----------
-        record : list of dicts
-            A list of records. Every record must have the keys of the internal,
-            dynamic recarray.
+        a : dict
         """
-        for record in records:
-            self.append_record(record=record)
+        assert isinstance(a, dict)
+        self._grow_if_needed(additional_size=1)
+        for key in self._recarray.dtype.names:
+            self._recarray[self._size][key] = a[key]
+        self._size += 1
 
-    def append_recarray(self, recarray):
+    def _append_list_of_scalars(self, a):
         """
-        Append a recarray to the dynamic racarray.
-        The size of the dynamic recarray will increase by len(recarray).
-
         Parameters
         ----------
-        recarray : numpy.recarray
-            This will be appended to the internal, dynamic recarray.
+        a : list of scalar like items
         """
-        self._grow_if_needed(additional_size=len(recarray))
+        assert isinstance(a, list)
+        for scalar_like_item in a:
+            self._append_scalar(scalar_like_item)
+
+    def _append_numpy_recarray_or_numpy_ndarray(self, a):
+        """
+        Parameters
+        ----------
+        a : numpy.recarray or numpy.ndarray
+        """
+        assert _isinstance_in(a, (np.recarray, np.ndarray))
+        self._grow_if_needed(additional_size=a.shape[0])
         start = self._size
-        stop = start + len(recarray)
-        self._recarray[start:stop] = recarray
-        self._size += len(recarray)
+        stop = start + a.shape[0]
+        self._recarray[start:stop] = a
+        self._size += a.shape[0]
+
+    def _append_numpy_record_or_numpy_void(self, a):
+        """
+        Parameters
+        ----------
+        a : numpy.record or numpy.void
+        """
+        assert _isinstance_in(a, (np.record, np.void))
+        self._grow_if_needed(additional_size=1)
+        self._recarray[self._size] = a
+        self._size += 1
 
     def _grow_if_needed(self, additional_size):
         assert additional_size >= 0

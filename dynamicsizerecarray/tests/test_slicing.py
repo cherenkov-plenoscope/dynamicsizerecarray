@@ -7,7 +7,7 @@ def make_example_dynamicsizerecarray():
         dtype=[("a", "i8"), ("b", "u2")]
     )
     for i in range(100):
-        dra.append_record({"a": 2 * i, "b": i})
+        dra.append({"a": 2 * i, "b": i})
     return dra
 
 
